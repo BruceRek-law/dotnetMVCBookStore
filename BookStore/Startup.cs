@@ -26,13 +26,34 @@ namespace BookStore
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Use(async (context, next)=>
+            {
+                await context.Response.WriteAsync("My First MiddleWare :D... about to write my second");
+                await next();
+            });
+
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("My Second Middleware");
+                await next();
+
+            });
+
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.Map("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello Wjkjorld!");
+                });
+            });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/Bruce", async context =>
+                {
+                    await context.Response.WriteAsync("Hello Bruce");
                 });
             });
         }
